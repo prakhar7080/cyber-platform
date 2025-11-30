@@ -28,11 +28,30 @@ const envOrigins = [
 
 const allowedOrigins = Array.from(new Set([...defaultOrigins, ...envOrigins]));
 
+// Check if origin is a Vercel preview deployment
+const isVercelPreview = (origin) => {
+  if (!origin) return false;
+  // Match Vercel preview URLs: *.vercel.app or *-git-*-*.vercel.app
+  return /^https:\/\/.*\.vercel\.app$/.test(origin);
+};
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
       return callback(null, true);
     }
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow all Vercel preview deployments
+    if (isVercelPreview(origin)) {
+      return callback(null, true);
+    }
+    
     console.warn(`CORS blocked origin: ${origin}`);
     return callback(new Error("Not allowed by CORS"));
   },
