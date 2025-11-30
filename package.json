@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.10",
+    "react-toastify": "^11.0.5"
+  }
+}
